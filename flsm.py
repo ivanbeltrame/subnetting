@@ -1,11 +1,14 @@
 from typing import List
 from copy import deepcopy
+from prettytable import PrettyTable
 from ipv4 import IP, NetworkAddress, logicOR, bits
+
 
 def main():
     # start_addr = IP(input("Indirizzo di partenza: "))
     subnetworks_num = 38
     start_addr = NetworkAddress("172.20.0.0")
+
     print(f"Network address:\t {start_addr}\t{start_addr.convert_to_binary()}")
 
     subnet_mask = start_addr.choose_subnet_mask()
@@ -35,18 +38,29 @@ def main():
         new_octets[subnetting_octet] = str(i*block_size)
         subnetworks.append(IP(".".join(new_octets)))
     
+    table = PrettyTable()
+    table.field_names = ["Net num", "Network address", "Subnetting octet", 
+                         "Broadcast", "First host address", "Last host address"]
     for i in range(len(subnetworks)):
-        print(f"{i+1}\t", end="")
-        print(f"{subnetworks[i]}\t", end="")
-        print(f"{subnetworks[i].convert_to_binary().split(".")[subnetting_octet]}\t", end="")
         broadcast_subnetwork = deepcopy(subnetworks[i])
-        broadcast_subnetwork.octets[subnetting_octet] = str(int(broadcast_subnetwork.octets[subnetting_octet]) + block_size - 1) # the subnetting octet is net + block size -1
-        for j in range(subnetting_octet+1, 4): # every octet to the right is 255
+        
+        # the subnetting octet is net + block size -1
+        broadcast_subnetwork.octets[subnetting_octet] = str(int(
+            broadcast_subnetwork.octets[subnetting_octet]) + block_size - 1)
+        
+        for j in range(subnetting_octet+1, 4):  # every octet to the right is 255
             broadcast_subnetwork.octets[j] = "255"
 
-        print(f"{broadcast_subnetwork}\t", end="")
-        print(f"{subnetworks[i]+1}\t", end="")
-        print(f"{broadcast_subnetwork-1}\t")
+        table.add_row([
+            i+1, 
+            subnetworks[i], 
+            subnetworks[i].convert_to_binary().split(".")[subnetting_octet], 
+            broadcast_subnetwork, 
+            subnetworks[i]+1, 
+            broadcast_subnetwork-1
+        ])
+    
+    print(table)
 
 
 if __name__ == "__main__":
