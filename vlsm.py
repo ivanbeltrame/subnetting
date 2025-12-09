@@ -35,12 +35,12 @@ def main():
         broadcast_addr = subnetworks[i] + block_size - 1
 
         table.add_row([
-            i+1, 
-            f"{subnetworks[i]}/{subnetworks[i].cidr}", 
-            subnetworks[i].convert_to_binary().split(".")[subnetting_octet], 
-            broadcast_addr, 
-            subnetworks[i] + 1, 
-            broadcast_addr - 1, 
+            i+1,
+            f"{subnetworks[i]}/{subnetworks[i].cidr}",
+            subnetworks[i].convert_to_binary().split(".")[subnetting_octet],
+            broadcast_addr,
+            subnetworks[i] + 1,
+            broadcast_addr - 1,
             block_size
         ])
     print(table)
