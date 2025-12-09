@@ -1,6 +1,7 @@
 from typing import Self
 import math
 
+
 class IP:
     def __init__(self, ip: str, cidr: int | None = None, bin: bool = False):
         self.ip = ip
@@ -18,7 +19,7 @@ class IP:
         if self.bin:
             self.__convert_from_binary()
 
-        for octet in self.octets: # rewrite with range() and indexes
+        for octet in self.octets:  # rewrite with range() and indexes
             try:
                 octet_int = int(octet)
                 # self.octets[self.octets.index(octet)] = int(octet)
@@ -26,13 +27,13 @@ class IP:
                 raise ValueError("Octets must be integers!")
             
             if octet_int < 0 or octet_int > 255:
-                    raise ValueError("Octets must be between 0 and 255")
+                raise ValueError("Octets must be between 0 and 255")
 
     def __convert_from_binary(self) -> None:
         try:
             dec_octets = []
             for octet in self.octets:
-                    dec_octets.append(int(octet, 2))
+                dec_octets.append(int(octet, 2))
 
             self.octets = dec_octets
         except ValueError:
@@ -144,9 +145,11 @@ class IP:
     def __repr__(self):
         return f"IP(\"{self.octets[0]}.{self.octets[1]}.{self.octets[2]}.{self.octets[3]}\")"
 
+
 class NetworkAddress(IP):
     def __init__(self, ip: str, cidr: int | None = None, bin: bool = False):
         super().__init__(ip, cidr, bin=bin)
+
 
 class SubnetMask(IP):
     def __init__(self, ip: str, bin: bool = False):
@@ -178,8 +181,7 @@ class SubnetMask(IP):
     
     def get_subnetting_octet(self) -> int:
         for i in range(len(self.octets)):
-            if int(self.octets[i]) != 0 and int(self.octets[i]) != 255: # had to remove for vlsm
-            # if int(self.octets[i]) != 0: # its bs
+            if int(self.octets[i]) != 0 and int(self.octets[i]) != 255:
                 return i
         raise ValueError("Can't use this subnet mask for subnetting")
     
@@ -201,6 +203,7 @@ def logicAND(a: IP, b: IP) -> IP:
     
     return IP(".".join(logic_and_octets), bin=True)
 
+
 def logicOR(a: IP, b: IP) -> IP:
     logic_or_octets = []
     a_bin_octets = a.convert_to_binary().split(".")
@@ -210,6 +213,7 @@ def logicOR(a: IP, b: IP) -> IP:
         logic_or_octets.append(bin(int(a_bin_octets[i], 2) | int(b_bin_octets[i], 2))[2:])
     
     return IP(".".join(logic_or_octets), bin=True)
+
 
 def bits(n: int) -> int:
     if n < 0:

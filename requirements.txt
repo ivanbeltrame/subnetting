@@ -1,1 +1,3 @@
 pytest
+prettytable
+style50
