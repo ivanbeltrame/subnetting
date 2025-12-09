@@ -97,7 +97,7 @@ class IP:
         try:
             return subnet_mask
         except UnboundLocalError:
-            raise ValueError("Can't choose a subnet mask to the IP")
+            raise ValueError("Can't choose a subnet mask for this IP")
         
     def get_inverted(self) -> Self:
         inverted_octets = []

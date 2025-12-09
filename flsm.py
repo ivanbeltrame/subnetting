@@ -6,8 +6,8 @@ from ipv4 import IP, NetworkAddress, logicOR, bits
 
 def main():
     # start_addr = IP(input("Indirizzo di partenza: "))
-    start_addr = NetworkAddress("172.20.0.0")
-    subnetworks_num = 38
+    start_addr = NetworkAddress("20.0.0.0")
+    subnetworks_num = 6
 
     subnet_mask = start_addr.choose_subnet_mask()
     broadcast_addr = logicOR(start_addr, subnet_mask.get_inverted())
@@ -28,12 +28,13 @@ def main():
         ["New subnet mask", new_subnet_mask, new_subnet_mask.convert_to_binary()],
         ["Block size", block_size, ""]
     ])
+    details_table.header = False
     details_table.align = "l"
     print(details_table)
 
     subnetting_octet = new_subnet_mask.get_subnetting_octet()
     subnetworks: List[IP] = []
-    for i in range(1, subnetworks_num+1):
+    for i in range(subnetworks_num):
         new_octets = start_addr.octets
         new_octets[subnetting_octet] = str(i*block_size)
         subnetworks.append(IP(".".join(new_octets)))
