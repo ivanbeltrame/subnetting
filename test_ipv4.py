@@ -19,13 +19,21 @@ def main():
 def test_validating():
     with raises(ValueError):
         IP("")
+    with raises(ValueError):
         IP("0.0.0")
+    with raises(ValueError):
         IP("a.0.0.0")
+    with raises(ValueError):
         IP("-1.0.0.0")
+    with raises(ValueError):
         IP(".0.0.0")
+    with raises(ValueError):
         IP("0.0.0.256")
+    with raises(ValueError):
         IP("...")
+    with raises(ValueError):
         IP(".0.0.")
+    with raises(ValueError):
         IP("0.0")
     assert str(IP("0.0.0.0")) == "0.0.0.0"
     assert str(IP("0.54.0.0")) == "0.54.0.0"
@@ -82,6 +90,7 @@ def test_subtract():
 def test_get_subnetting_octet():
     with raises(ValueError):
         SubnetMask("255.255.255.0").get_subnetting_octet()
+    with raises(ValueError):
         SubnetMask("255.0.0.0").get_subnetting_octet()
     assert SubnetMask("255.255.255.5").get_subnetting_octet() == 3
     assert SubnetMask("255.255.55.0").get_subnetting_octet() == 2
