@@ -1,18 +1,16 @@
-from typing import List
 from copy import deepcopy
 from prettytable import PrettyTable
 from ipv4 import IP, NetworkAddress, SubnetMask, bits
 
 
-def main():
-    start_addr = NetworkAddress("192.168.1.0", cidr=24)
+def vlsm(network_address: str, subnetworks_sizes: list[int], cidr: int = 24):
+    start_addr = NetworkAddress(network_address, cidr)
 
-    subnetworks_sizes = [2, 40, 2, 16, 76]
     subnetworks_sizes.sort(reverse=True)
 
     print(f"{start_addr}/{start_addr.choose_subnet_mask().convert_to_cidr()}")
 
-    subnetworks: List[IP] = []
+    subnetworks: list[IP] = []
     for i in range(len(subnetworks_sizes)):
         if len(subnetworks) == 0:
             new_subnetwork = deepcopy(start_addr)
@@ -44,7 +42,3 @@ def main():
             block_size
         ])
     print(table)
-
-
-if __name__ == "__main__":
-    main()

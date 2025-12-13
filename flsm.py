@@ -1,13 +1,10 @@
-from typing import List
 from copy import deepcopy
 from prettytable import PrettyTable
 from ipv4 import IP, NetworkAddress, logicOR, bits
 
 
-def main():
-    # start_addr = IP(input("Indirizzo di partenza: "))
-    start_addr = NetworkAddress("20.0.0.0")
-    subnetworks_num = 6
+def flsm(network_address: str, subnetworks_num: int):
+    start_addr = NetworkAddress(network_address)
 
     subnet_mask = start_addr.choose_subnet_mask()
     broadcast_addr = logicOR(start_addr, subnet_mask.get_inverted())
@@ -33,7 +30,7 @@ def main():
     print(details_table)
 
     subnetting_octet = new_subnet_mask.get_subnetting_octet()
-    subnetworks: List[IP] = []
+    subnetworks: list[IP] = []
     for i in range(subnetworks_num):
         new_octets = start_addr.octets
         new_octets[subnetting_octet] = str(i*block_size)
@@ -62,7 +59,3 @@ def main():
         ])
     
     print(ips_table)
-
-
-if __name__ == "__main__":
-    main()
